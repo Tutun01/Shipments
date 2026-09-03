@@ -155,6 +155,13 @@
                 <strong>Details:</strong><br>
                 {{ $shipment->details }}
             </div>
+
+            <div class="detail-row">
+                @foreach($shipment->documents as $document)
+                    <a target="_blank" href="/storage/documents/{{$document->documents_name}}">{{$document->documents_name}}</a>
+                @endforeach
+            </div>
+
         </div>
     </div>
 
