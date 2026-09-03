@@ -4,19 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewShipmentRequest;
 use App\Models\Shipment;
+use App\Models\ShipmentDocuments;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use PhpParser\Node\Stmt\Else_;
 
 class ShipmentController extends Controller
 {
+    use ImageUpload;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
         $shipments = Cache::remember('unassigned_status', now()->addMinutes(60), function () {
-            return Shipment::where('status', 'unassigned')->get();
+            return Shipment::orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
         });
 
         return view('shipments.index', [
@@ -37,7 +42,39 @@ class ShipmentController extends Controller
      */
     public function store(NewShipmentRequest $request)
     {
-        Shipment::create($request->validated());
+        $shipment = Shipment::create($request->validated());
+
+        $fileTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordpreocessingml.document'
+        ];
+
+     foreach ($request->file('documents') as $document) {
+
+         if (str_starts_with($document->getMimeType(), 'image/')) {
+
+            $name = $this->uploadImage( $document, "documents/$shipment->id");
+            $name = $shipment->id."/".$name;
+            ShipmentDocuments::create([
+                'shipment_id' => $shipment->id,
+                'documents_name' => $name
+            ]);
+
+         } elseif (in_array($document->getMimeType(), $fileTypes)) {
+
+             $extension = $document->getClientOriginalExtension(); // .pdf, .doc
+             $fileName = uniqid().".".$extension;
+             $path = $document->storeAs("documents/{$shipment->id}", $fileName, 'public');
+
+             $path = str_replace("documents/", "", $path);
+
+             ShipmentDocuments::create([
+                 'shipment_id' => $shipment->id,
+                 'documents_name' => $path
+             ]);
+         }
+    }
         return redirect()->route('shipments.index');
     }
 
