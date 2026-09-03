@@ -175,6 +175,10 @@
                         <span class="shipment-user">User #{{ $shipment->user_id }}</span>
                         <span>{{ $shipment->created_at->format('d.m.Y H:i') }}</span>
                     </div>
+
+                    <div class="shipment-footer">
+                        <a href="{{ route('shipments.show', ['shipment' => $shipment->id ]) }}">View shipment</a>
+                    </div>
                 </div>
             @endforeach
         </div>
