@@ -117,7 +117,7 @@
         @endif
 
         <div class="form-card">
-            <form method="POST" action="{{ route('shipments.store') }}">
+            <form enctype="multipart/form-data" method="POST" action="{{ route('shipments.store') }}">
                 @csrf
 
                 <div class="form-row">
@@ -161,22 +161,16 @@
                         <label for="status">Status</label>
                         <select id="status" name="status" required>
                             @foreach(\App\Models\Shipment::ALLOWED_STATUSES as $status)
-                                <option value="{{'status'}}">{{$status}}</option>
-                            @endforeach
+                                <option value="{{ $status }}">{{ $status }}</option>                            @endforeach
                         </select>
                     </div>
                 </div>
 
+
+
                 <div class="form-row">
-                    <label for="user_id">User</label>
-                    <select id="user_id" name="user_id" required>
-                        <option value="">Select user</option>
-                        @foreach(\App\Models\User::all() as $user)
-                            <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                {{ $user->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <label for="documents">Documents</label>
+                   <input type="file" name="documents[]" multiple required>
                 </div>
 
                 <div class="form-row">
