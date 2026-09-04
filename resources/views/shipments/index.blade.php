@@ -179,6 +179,18 @@
                     <div class="shipment-footer">
                         <a href="{{ route('shipments.show', ['shipment' => $shipment->id ]) }}">View shipment</a>
                     </div>
+
+                    <form method="post" action="{{ route('shipments.assigneUser', ['shipment' => $shipment->id ]) }}">
+                        @csrf
+                        <select name = "user">
+                            <option selected disabled>None</option>
+                           @foreach(\App\Models\User::all() as $user)
+                               <option value="{{$user->id}}">{{$user->name}}</option>
+                           @endforeach
+                        </select>
+                        <button> Assigned </button>
+                    </form>
+
                 </div>
             @endforeach
         </div>
