@@ -166,6 +166,10 @@
                     </div>
                 </div>
 
+                <div class="form-row">
+                    <label for="client_id">Client ID</label>
+                    <input type="number" id="client_id" name="client_id" maxlength="128" value="{{ $shipment->user_id ?? '' }}" required>
+                </div>
 
 
                 <div class="form-row">
