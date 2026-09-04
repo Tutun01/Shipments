@@ -3,7 +3,6 @@
 namespace  App\Traits;
 
 use App\Http\Requests\NewAvatarRequest;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
