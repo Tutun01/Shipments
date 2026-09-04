@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UserClients;
+use App\Rules\UserTrucker;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateShipmentRequest extends FormRequest
@@ -17,7 +19,8 @@ class UpdateShipmentRequest extends FormRequest
             'price' => ['required', 'integer', 'min:0'],
             'status' => ['required', 'string', 'max:10', 'in:in_progress,unassigned,completed,problem'],
             'details' => ['required', 'string'],
-            'user_id' => 'required|integer|exist:users,id'
+            'user_id' => ['required', new UserTrucker()],
+            'client_id' => ['required', new UserClients()]
         ];
     }
 }
