@@ -196,4 +196,6 @@
         </div>
     </div>
 
+    <livewire:shipment-assigned-list />
+
 @endsection
