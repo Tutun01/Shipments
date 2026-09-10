@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\UserClients;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class NewShipmentRequest extends FormRequest
 {
@@ -25,16 +26,16 @@ class NewShipmentRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:128'],
-            'from_city' => ['required', 'string', 'max:64'],
-            'from_country' => ['required', 'string', 'max:64'],
-            'to_city' => ['required', 'string', 'max:64'],
-            'to_country' => ['required', 'string', 'max:64'],
+            'fromCity' => ['required', 'string', 'max:64'],
+            'fromCountry' => ['required', 'string', 'max:64'],
+            'toCity' => ['required', 'string', 'max:64'],
+            'toCountry' => ['required', 'string', 'max:64'],
             'price' => ['required', 'integer', 'min:0'],
-            'status' => ['required', 'string', 'max:10', 'in:in_progress,unassigned,completed,problem'],
+            'status' => ['required', 'string',  Rule::in(\App\Models\Shipment::ALLOWED_STATUSES)],
             'details' => ['required', 'string'],
             'documents'  => 'required|array',
             'documents.*'  => 'file|mimes:jpg,jpeg,png,webp,pdf,doc,docx|max:10240',
-            'client_id' => ['require', new UserClients()]
+            'clientId' => ['required', new UserClients()]
         ];
     }
 }
